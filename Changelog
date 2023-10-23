@@ -1,0 +1,13 @@
+Mon 23/10
+- downloaded fast-csv-parser library
+
+- created translation units for DataExtraction C++ script:
+    - filled with test/skeleton code to make use of uncleaned data
+    - updated makefile to include the library file
+
+- created bash script to clean data files called cleaner.sh
+- cleaned data files and put them in directory ./datasets/cleaned
+
+- updated translation units for DataExtraction C++ script:
+    - significant change; now script instead extracts cleaned data files. Also changed the name of some functions and variables to specify 'dataextraction' name instead of CSVparser something that was there before. Script now compiles, but the output of the extraction doesn't currently go anywhere.
+
