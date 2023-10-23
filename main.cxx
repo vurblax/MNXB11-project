@@ -3,12 +3,19 @@
 
 // first part where we extract the info from the csv file
 int main() {
-    // Specify the dataset path
-    const std::string csvFilePath = "./datasets/smhi-opendata_1_162860_20231007_155220_Lulea.csv";
+    // specify the dataset path to the cleaned file
+    //this needs to be changed to specify each file we want to look at
+    //right now it looks at Luleå
+    const std::string csvFilePath = "./datasets/cleaned/smhi-opendata_1_162860_20231007_155220_Lulea.csv";
 
-    CSVProcessor csvProcessor(csvFilePath);
+    DataExtractor dataExtractor(csvFilePath);
 
-    csvProcessor.ProcessCSVData();
+    //a nice little message here
+    if (dataExtractor.ProcessCSVData()) {
+        std::cout << "Data extraction completed successfully." << std::endl;
+    } else {
+        std::cerr << "Data extraction failed." << std::endl;
+    }
 
 
 // here we need a second part to get the output in a file we can use, like a TFile and a TTree thing
