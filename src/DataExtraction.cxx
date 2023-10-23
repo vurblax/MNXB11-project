@@ -1,22 +1,37 @@
 #include "DataExtraction.h"
 #include <iostream>
+#include <fstream>
+#include <sstream>
 
-CSVProcessor::CSVProcessor(const std::string& filePath) : reader(filePath) {
-    reader.read_header(io::ignore_no_column, "Datum", "Tid (UTC)", "Lufttemperatur");
+DataExtractor::DataExtractor(const std::string& filePath) : csvFilePath(filePath) {
 }
 
-CSVProcessor::~CSVProcessor() {
-    // Destructor
-}
-
-void CSVProcessor::ProcessCSVData() {
-    while (reader.read_row(datum, tid, lufttemperatur)) {
-        std::replace(datum.begin(), datum.end(), ';', ' ');
-        std::replace(tid.begin(), tid.end(), ';', ' ');
-        std::replace(lufttemperatur.begin(), lufttemperatur.end(), ';', ' ');
-
-        std::cout << "Datum: " << datum << std::endl;
-        std::cout << "Tid (UTC): " << tid << std::endl;
-        std::cout << "Lufttemperatur: " << lufttemperatur << std::endl;
+bool DataExtractor::ProcessCSVData() {
+    //this opens the csv file I think
+    std::ifstream inputFile(csvFilePath);
+    if (!inputFile.is_open()) {
+        std::cerr << "Couldn't open csv file, you need to close the file first" << std::endl;
+        return false;
+        // just an error message to make sure the file isn't open because it cant be read/changed in that case
     }
+
+
+//the following snippet initilizes the variables that we want to store the data in (I think...)
+std::string line;
+std::string date, time, airtemp, quality;
+
+//here we process the data in a while loop
+
+while (std::getline(inputFile, line)) {
+    //splits the line into four columns
+    std::istringstream iss(line);
+    if (iss >> date >> time >> airtemp >> quality) {
+        //HERE is where we need to extract them into an output file of some sort!!!
+        // NEW CODE FOR TFiles etc HERE
+    }
+}
+
+inputFile.close();
+
+return true;
 }
