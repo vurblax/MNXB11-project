@@ -4,15 +4,13 @@
 #include <string>
 #include "csv.h"
 
-class CSVProcessor {
+class DataExtractor {
 public:
-    CSVProcessor(const std::string& filePath);
-    ~CSVProcessor();
-    void ProcessCSVData();
+    DataExtractor(const std::string& filePath);
+    bool ProcessCSVData();
 
 private:
-    io::CSVReader<4, io::trim_chars<' '>, io::no_quote_escape<';'>> reader;
-    std::string datum, tid, lufttemperatur;
+    std::string csvFilePath;
 };
 
 #endif 
