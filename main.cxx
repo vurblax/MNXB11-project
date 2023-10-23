@@ -1,15 +1,17 @@
-
 #include <iostream>
-int main(int argc, char *argv[]) {
-  std::cout << "I am just a code template, you need to implement the "
-               "functionality you want to use yourself!"
-            << std::endl;
+#include "DataExtraction.h"
 
-  std::cout << "We were passed " << argc
-            << " command line arguments, the first of which was " << argv[0]
-            << std::endl;
-  std::cout << "With a good CLI library, we could use the command line "
-               "arguments to make a useful program."
-            << std::endl;
-  return 0;
+// first part where we extract the info from the csv file
+int main() {
+    // Specify the dataset path
+    const std::string csvFilePath = "./datasets/smhi-opendata_1_162860_20231007_155220_Lulea.csv";
+
+    CSVProcessor csvProcessor(csvFilePath);
+
+    csvProcessor.ProcessCSVData();
+
+
+// here we need a second part to get the output in a file we can use, like a TFile and a TTree thing
+
+    return 0;
 }

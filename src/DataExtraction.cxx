@@ -1,27 +1,22 @@
-// piece of code to extract the csv data into a nice list using the library command
+#include "DataExtraction.h"
+#include <iostream>
 
+CSVProcessor::CSVProcessor(const std::string& filePath) : reader(filePath) {
+    reader.read_header(io::ignore_no_column, "Datum", "Tid (UTC)", "Lufttemperatur");
+}
 
+CSVProcessor::~CSVProcessor() {
+    // Destructor
+}
 
-//piece of code to get that list into an output file, ex a TFile so we can use it wihROOT
-void persist_measurements(const std::vector<Measurement>& measurements,
-                          const std::string& output_filename) {
-  // Note: We need .c_str() because TFile expects a C-string (char*) but
-  // input_filename is a std::string.
+void CSVProcessor::ProcessCSVData() {
+    while (reader.read_row(datum, tid, lufttemperatur)) {
+        std::replace(datum.begin(), datum.end(), ';', ' ');
+        std::replace(tid.begin(), tid.end(), ';', ' ');
+        std::replace(lufttemperatur.begin(), lufttemperatur.end(), ';', ' ');
 
-  TFile output_file{output_filename.c_str(), "RECREATE"};
-  TTree tree{"MNXB11", "MNXB11"};
-  Double_t background;
-  Double_t signal;
-  Int_t id;
-  tree.Branch("background", &background);
-  tree.Branch("signal", &signal);
-  tree.Branch("id", &id);
-
-  for (const auto measurement : measurements) {
-    id = measurement.get_id();
-    background = measurement.get_background();
-    signal = measurement.get_signal();
-    tree.Fill();
-  }
-  tree.Write();
+        std::cout << "Datum: " << datum << std::endl;
+        std::cout << "Tid (UTC): " << tid << std::endl;
+        std::cout << "Lufttemperatur: " << lufttemperatur << std::endl;
+    }
 }
