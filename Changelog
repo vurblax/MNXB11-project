@@ -11,3 +11,9 @@ Mon 23/10
 - updated translation units for DataExtraction C++ script:
     - significant change; now script instead extracts cleaned data files. Also changed the name of some functions and variables to specify 'dataextraction' name instead of CSVparser something that was there before. Script now compiles, but the output of the extraction doesn't currently go anywhere.
 
+Tue 24/10
+- downloaded date library
+- DataExtraction translation units updated: exctracts csv file into a TTree
+  HOWEVER: while it compiles, ROOT does not recognise the date pointer.
+  Code needs to be further updated. Issue probably lies with implementation
+  of the date library.
