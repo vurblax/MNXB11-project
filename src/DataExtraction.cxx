@@ -29,12 +29,16 @@ TFile output_file(output_tempdatafile.c_str(), "RECREATE");
 TTree tree("projectData", "Data for the project");
 
 date::year_month_day date;   
-date::hh_mm_ss time; 
+date::hh_mm_ss<std::chrono::seconds> time; 
 date::year_month_day* date_ptr = nullptr;
 date::hh_mm_ss* time_ptr = nullptr;
 
-tree.Branch("date", &date);
-tree.Branch("time", &time);
+tree.Branch("year", &year);
+tree.Branch("month", &month)
+tree.Branch("day", &day)
+tree.Branch("hour", &hour);
+tree.Branch("minute", &minute);
+tree.Branch("second", &second);
 tree.Branch("airtemp",&airtemp);
 tree.Branch("quality", &quality);
 
