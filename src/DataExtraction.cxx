@@ -13,6 +13,7 @@ DataExtractor::DataExtractor(const std::string& filePath, const std::string& out
 }
 
 bool DataExtractor::ProcessCSVData(const std::string& output_tempdatafile) {
+    std::cout << "csvFilePath: " << csvFilePath << std::endl;
     std::ifstream inputFile(csvFilePath);
     if (!inputFile.is_open()) {
         std::cerr << "Couldn't open the CSV file." << std::endl;
