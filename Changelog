@@ -17,3 +17,4 @@ Tue 24/10
   HOWEVER: while it compiles, ROOT does not recognise the date pointer.
   Code needs to be further updated. Issue probably lies with implementation
   of the date library.
+- Started working on the WeatherData files 
