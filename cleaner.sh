@@ -16,8 +16,7 @@
 ###### Functions #######################################################
 
 ## usage
-# this function takes no parameters and prints an error with the 
-# information on how to run this script.
+# this function takes no parameters and prints an error with the information on how to run this script.
 usage(){
 	echo "----"
 	echo -e "  To call this script please use"
@@ -77,6 +76,9 @@ cut -d';' -f 1,2,3,4,5 clean1_${DATAFILE} > clean2_${DATAFILE}
 echo "Substituting the ; with spaces, result in rawdata_${DATAFILE}"
 sed 's/;/ /g' clean2_${DATAFILE} > rawdata_${DATAFILE}
 
+echo "Substituting the - with spaces, result in rawdata2_${DATAFILE}"
+sed 's/-/ /g' rawdata_${DATAFILE} > rawdata2_${DATAFILE}
+
 cat /dev/null > report_${DATAFILE}
 
 echo "Writing filesizes summary to report_${DATAFILE}"
@@ -89,3 +91,4 @@ rm original_${DATAFILE}
 rm clean1_${DATAFILE}
 rm clean2_${DATAFILE}
 rm report_${DATAFILE}
+rm rawdata_${DATAFILE}
