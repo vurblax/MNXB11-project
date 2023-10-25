@@ -22,8 +22,10 @@ bool DataExtractor::ProcessCSVData(const std::string& output_tempdatafile) {
 
     double_t airtemp;
     std::string quality;
-    date::year_month_day date;
+    std::string date_str;
     std::string time;
+
+    date::year_month_day date;
 
     TFile output_file(output_tempdatafile.c_str(), "RECREATE");
     TTree tree("projectData", "Data for the project");
@@ -47,7 +49,7 @@ bool DataExtractor::ProcessCSVData(const std::string& output_tempdatafile) {
 
         std::istringstream iss(line);
 
-        if (iss >> date >> time >> airtemp >> quality) {
+        if (iss >> date_str >> time >> airtemp >> quality) {
             tree.Fill();
         }
     }
