@@ -5,8 +5,7 @@
 
 class WeatherData {
  public:
-  // Note: Bad idea, using two adjacent parameters that can be switched
-  // accidentally!
+ 
   WeatherData(int year, int month, int day, int hour, int minute, int second, double temperature, int quality);
 
  private:
@@ -19,3 +18,10 @@ class WeatherData {
   double temperature; 
   int quality;
 };
+
+//Constructor implementation
+WeatherData::WeatherData(int year, int month, int day, int hour, int minute, int second, double temperature, int quality)
+    : year(year), month(month), day(day), hour(hour), minute(minute), second(second), temperature(temperature), quality(quality) {
+}
+
+#endif /* WEATHERDATA_H */
