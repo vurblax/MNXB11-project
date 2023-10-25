@@ -18,3 +18,9 @@ Tue 24/10
   Code needs to be further updated. Issue probably lies with implementation
   of the date library.
 - Started working on the WeatherData files 
+
+Wed 25/10
+- date variable divided into three integers
+- time variable no longer using date library, instead the hour only is
+  being extracted to the TTree as one integer
+- data extraction now compiles without errors and gives correct output
