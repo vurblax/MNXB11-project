@@ -23,7 +23,9 @@ bool DataExtractor::ProcessCSVData(const std::string& output_tempdatafile) {
     double_t airtemp;
     std::string quality;
     date::year_month_day date;
-    std::chrono::seconds time_seconds;
+    std::string time_encoded;
+    int hour(0);
+
 
     TFile output_file(output_tempdatafile.c_str(), "RECREATE");
     TTree tree("projectData", "Data for the project");
@@ -35,14 +37,12 @@ bool DataExtractor::ProcessCSVData(const std::string& output_tempdatafile) {
     }
 
     int year, month, day;
-    int hour, minute, second;
 
+    
     tree.Branch("year", &year);
     tree.Branch("month", &month);
     tree.Branch("day", &day);
-    tree.Branch("hour", &hour); 
-    tree.Branch("minute", &minute);
-    tree.Branch("second", &second); 
+    tree.Branch("time", &time_encoded); 
     tree.Branch("airtemp", &airtemp);
     tree.Branch("quality", &quality);
 
@@ -54,9 +54,21 @@ bool DataExtractor::ProcessCSVData(const std::string& output_tempdatafile) {
 
         std::istringstream iss(line);
 
-        if (iss >> year >> month >> day >> hour >> minute >> second >> airtemp >> quality) {
-            date = date::year(year) / month / day;
-            time_seconds = std::chrono::hours{hour} + std::chrono::minutes{minute} + std::chrono::seconds{second};
+//        if (iss >> year >> month >> day >> hour >> minute >> second >> airtemp >> quality || true) {
+        if (iss >> year >> month >> day >> time_encoded >> airtemp >> quality || true) {
+            date = date::year(year) / std::abs(month) / std::abs(day);
+
+            size_t colon_pos = time_encoded.find(":");
+            if (colon_pos != std::string::npos) {
+                std::string hour_part = time_encoded.substr(0, colon_pos);
+                hour = std::stoi(hour_part);
+            }
+
+            // Read out the first two letters in time_encoded 
+            // time_encoded substring 
+           // stoi 
+            // transform to an int 
+            // 
 
             tree.Fill();
         }
