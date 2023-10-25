@@ -23,7 +23,7 @@ bool DataExtractor::ProcessCSVData(const std::string& output_tempdatafile) {
     double_t airtemp;
     std::string quality;
     date::year_month_day date;
-    std::string time;
+    std::chrono::seconds time_seconds;
 
     TFile output_file(output_tempdatafile.c_str(), "RECREATE");
     TTree tree("projectData", "Data for the project");
@@ -35,11 +35,14 @@ bool DataExtractor::ProcessCSVData(const std::string& output_tempdatafile) {
     }
 
     int year, month, day;
+    int hour, minute, second;
 
     tree.Branch("year", &year);
     tree.Branch("month", &month);
     tree.Branch("day", &day);
-    tree.Branch("time", &time);
+    tree.Branch("hour", &hour); 
+    tree.Branch("minute", &minute);
+    tree.Branch("second", &second); 
     tree.Branch("airtemp", &airtemp);
     tree.Branch("quality", &quality);
 
@@ -51,8 +54,9 @@ bool DataExtractor::ProcessCSVData(const std::string& output_tempdatafile) {
 
         std::istringstream iss(line);
 
-        if (iss >> year >> month >> day >> time >> airtemp >> quality) {
+        if (iss >> year >> month >> day >> hour >> minute >> second >> airtemp >> quality) {
             date = date::year(year) / month / day;
+            time_seconds = std::chrono::hours{hour} + std::chrono::minutes{minute} + std::chrono::seconds{second};
 
             tree.Fill();
         }
