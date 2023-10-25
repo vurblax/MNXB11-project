@@ -42,7 +42,7 @@ bool DataExtractor::ProcessCSVData(const std::string& output_tempdatafile) {
     tree.Branch("year", &year);
     tree.Branch("month", &month);
     tree.Branch("day", &day);
-    tree.Branch("time", &time_encoded); 
+    tree.Branch("hour", &hour); 
     tree.Branch("airtemp", &airtemp);
     tree.Branch("quality", &quality);
 
