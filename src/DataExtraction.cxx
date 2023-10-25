@@ -22,13 +22,23 @@ bool DataExtractor::ProcessCSVData(const std::string& output_tempdatafile) {
 
     double_t airtemp;
     std::string quality;
-    std::string date_str;
+    date::year_month_day date;
     std::string time;
 
     TFile output_file(output_tempdatafile.c_str(), "RECREATE");
-    TTree tree("projectData", "Data for the project");
+    if (!output_file.IsOPen()) {
+        std::cerr << "Couldn't open the output TFile." << std::endl;
+        inputFile.close();
+        return false;
+    }
 
-    date::year_month_day date;
+    TTree tree("projectData", "Data for the project");
+    if (!tree.GetDirectory()) {
+        std::cerr << "Couldn't create the TTree." << std::endl;
+        inputFile.close();
+        output_file.Close();
+        return false;
+    }
 
     tree.Branch("date", &date);
     tree.Branch("time", &time);
@@ -43,15 +53,21 @@ bool DataExtractor::ProcessCSVData(const std::string& output_tempdatafile) {
 
         std::istringstream iss(line);
 
-        if (iss >> date_str >> time >> airtemp >> quality) {
+        if (iss >> date >> time >> airtemp >> quality) {
             tree.Fill();
         }
     }
 
-    inputFile.close();
+inputFile.close();
 
-    tree.Write();
+if (tree.Write() < 0) {
+    std::cerr << "Error writing TTree to output file." << std::endl;
     output_file.Close();
+    return false;
+}
 
-    return true;
+tree.Write();
+output_file.Close();
+
+return true;
 }
