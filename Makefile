@@ -3,8 +3,8 @@ CXXWARNINGS := -Wall -Wextra -Werror
 CXXOPT := -O3
 CXXSTD := -std=c++17
 INCLUDES := -I include -I ./dependencies/external/include
-CXXFLAGS := $(CXXWARNINGS) $(CXXSTD) $(CXXOPT) $(INCLUDES)
-LDFLAGS :=
+CXXFLAGS := $(CXXWARNINGS) $(CXXSTD) $(CXXOPT) $(INCLUDES) $(shell root-config --cflags)
+LDFLAGS := $(shell root-config --ldflags --libs)
 
 .PHONY: all clean
 
