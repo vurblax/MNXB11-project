@@ -26,12 +26,6 @@ bool DataExtractor::ProcessCSVData(const std::string& output_tempdatafile) {
     std::string time;
 
     TFile output_file(output_tempdatafile.c_str(), "RECREATE");
-    if (!output_file.IsOPen()) {
-        std::cerr << "Couldn't open the output TFile." << std::endl;
-        inputFile.close();
-        return false;
-    }
-
     TTree tree("projectData", "Data for the project");
     if (!tree.GetDirectory()) {
         std::cerr << "Couldn't create the TTree." << std::endl;
