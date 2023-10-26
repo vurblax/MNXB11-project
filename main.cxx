@@ -26,8 +26,8 @@ int main() {
 
 // *******HERE STARTS Analysis_2*********
 
-std::string longterm_histogram = "output.root";
-LongtermTemp(output_tempdatafile, longterm_histogram);
+std::string output_tempdatafile = "output.root";
+LongtermTemp(output_tempdatafile);
 
 
 
