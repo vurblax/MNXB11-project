@@ -7,7 +7,7 @@ class WeatherData {
  public:
  
   WeatherData(int year, int month, int day, int hour, double airtemp, char quality);
-  
+  WeatherData(int year, double airtemp, char quality);
   bool isDataIgnored() const {
         return ignoreData;
     }
@@ -20,6 +20,7 @@ class WeatherData {
   double airtemp; 
   char quality;
   bool ignoreData = false; // Initialized to false by default
+
 };
 
 //Constructor implementation
