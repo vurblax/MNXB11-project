@@ -6,6 +6,8 @@
 #include "TH1D.h"
 #include "TGraph.h"
 #include "TCanvas.h"
+#include "TLegend.h"
+#include "TF1.h"
 #include "WeatherData.h"
 
 void LongtermTemp(const std::string& output_tempdatafile) {
@@ -59,10 +61,6 @@ auto gr = new TGraph();
 gr->SetTitle("Temperature Change In Lund From 1990 To 2022;Year;Mean Temperature (deg C)");
 gr->GetXaxis()->CenterTitle();
 gr->GetYaxis()->CenterTitle();
-gr->GetXaxis()->SetTitleFont(42); // Set to bold
-gr->GetYaxis()->SetTitleFont(42); // Set to bold
-gr->GetXaxis()->SetTitleSize(0.04); // Adjust the size as needed
-gr->GetYaxis()->SetTitleSize(0.04); // Adjust the size as needed
 gr->GetXaxis()->SetTitleColor(kBlack); 
 gr->GetYaxis()->SetTitleColor(kBlack); 
 
@@ -80,7 +78,33 @@ gr->GetYaxis()->SetTitleColor(kBlack);
     gr->SetLineColor(kRed);
     c1->SetFillColor(kGray);
 
+    TF1* linearFit = new TF1("linearFit", "[0] + [1]*x", 1920, 2022);
+    linearFit->SetParName(1, "year");
+
+    double intercept = linearFit->GetParameter(0);
+    double slope = linearFit->GetParameter(1);
+
+    TString fitParameters = Form("Fit Parameters: Intercept=%.2f, Slope=%.2f", intercept, slope);
+
+    TLegend* legend = new TLegend(0.15, 0.7, 0.4, 0.9);
+    legend->SetHeader("Legend");
+    legend->AddEntry(gr, "Yearly mean temperature", "l"); 
+    legend->AddEntry(linearFit, "Linear fit", "l");
+
+    legend->SetBorderSize(1);
+    legend->SetFillStyle(0);
+    legend->SetFillColor(kWhite);
+    legend->SetTextSize(0.03);
+
+
+    linearFit->SetLineColor(kBlue);
+
+
+
+
     gr->Draw("AL"); 
+    gr->Fit(linearFit, "Q");
+    legend->Draw();
     c1->SaveAs("yearmeans.png");
 
 
