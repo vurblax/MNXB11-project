@@ -2,18 +2,18 @@
 
 WeatherData::WeatherData(int year, int month, int day, int hour, double temperature, char quality)
     : year{year}, month{month}, day{day}, hour{hour}, temperature{temperature}, quality{quality} { 
-        
+    // Checks if temperature has an infinite value, if so, skip
         if (std::isinf(temperature)) {
         throw std::invalid_argument("Infinite temperature value found!");
         
     }
-       // Check if the quality is 'Y' (bad data) or 'G' (good data)
-    if (quality == 'Y' || quality == 'G') {
-        if (std::isinf(temperature)) {
-            throw std::invalid_argument("Infinite temperature value found!");
-        }
-    } else {
-        // If quality is not 'Y' or 'G', set a flag to ignore this data
-        ignoreData = true;
+    
+    // Initialize the flag to true, assuming data is ignored by default
+    ignoreData = true;
+    
+    // Check if the quality is 'G' (good)
+    if (quality == 'G') {
+        // Set the flag to not ignore this data
+        ignoreData = false;
     }
 }
