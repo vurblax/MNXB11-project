@@ -4,11 +4,12 @@
 #include "TFile.h"
 #include "TCanvas.h"
 #include "TH1D.h"
+#include "TGraph.h"
+#include "TCanvas.h"
+#include "WeatherData.h"
 
 void LongtermTemp(const std::string& output_tempdatafile) {
-                    //const char* probably needs to change
-                    //i want that line to retrieve our extracted data
-                    //that is, from output.root
+
     TFile output_file{output_tempdatafile.c_str(), "UPDATE"};
 if (output_file.IsZombie()) {
     std::cerr << "Error: Could not open data file." << std::endl;
@@ -33,26 +34,57 @@ if (output_file.IsZombie()) {
     tempBranch->SetAddress(&airtemp);
     qualityBranch->SetAddress(&quality);
 
-    int startYear = 1920;
+    int startYear = 1990;
     int endYear = 2022;
 
-    TH1D* yearMeanHist{new TH1D{"yearMeanHist", "Annual Mean Temperatures", 
-        endYear - startYear + 1, startYear - 0.5, endYear + 0.5}};
+    std::map<int, double> yearSum;
+    std::map<int, int> yearCount;
 
-    Long64_t nEntries = dataTree->GetEntries();
-    for (Long64_t entry = 0; entry < nEntries; ++entry) {
-        dataTree->GetEntry(entry);
+    for (Long64_t i = 0; i < dataTree->GetEntries(); i++) {
+        dataTree->GetEntry(i);
         WeatherData measurements{year, airtemp, quality};
+
         if (year >= startYear && year <= endYear) {
-            if (measurements.isDataIgnored()) 
-              yearMeanHist->Fill(year, airtemp);
+           // if (measurements.isDataIgnored()) { //removed this check because: 
+                // the raw data has been checked; quality is 'G' for those values
+                //but including the quality check gives odd values between years 1980-2010  
+                // Needs further troubleshooting in order to determine cause
+                yearSum[year] += airtemp;
+                yearCount[year]++;
+          //  }
         }
     }
 
-    yearMeanHist->SetXTitle("Year");
-    yearMeanHist->SetYTitle("Mean Temperature");
+auto gr = new TGraph();
+gr->SetTitle("Temperature Change In Lund From 1990 To 2022;Year;Mean Temperature (deg C)");
+gr->GetXaxis()->CenterTitle();
+gr->GetYaxis()->CenterTitle();
+gr->GetXaxis()->SetTitleFont(42); // Set to bold
+gr->GetYaxis()->SetTitleFont(42); // Set to bold
+gr->GetXaxis()->SetTitleSize(0.04); // Adjust the size as needed
+gr->GetYaxis()->SetTitleSize(0.04); // Adjust the size as needed
+gr->GetXaxis()->SetTitleColor(kBlack); 
+gr->GetYaxis()->SetTitleColor(kBlack); 
 
-    yearMeanHist->Write();
+    int pointIndex = 0;
+    for (const auto& entry : yearSum) {
+        int year = entry.first;
+        double meanTemp = (yearCount[year] > 0) ? (entry.second / yearCount[year]) : 0.0;
+        gr->SetPoint(pointIndex, year, meanTemp);
+        pointIndex++;
+    }
+   
+    TCanvas* c1 = new TCanvas("c1", "Temperature Graph", 800, 600);
+    
+    gr->SetLineWidth(3);
+    gr->SetLineColor(kRed);
+    c1->SetFillColor(kGray);
+
+    gr->Draw("AL"); 
+    c1->SaveAs("yearmeans.png");
+
+
+    gr->Write();
     output_file.Close();
 }
 
