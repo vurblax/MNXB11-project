@@ -24,17 +24,10 @@ int main() {
         std::cerr << "Data extraction failed." << std::endl;
     }
 
-const auto WeatherData{WeatherData(input_file)};
-
 // *******HERE STARTS Analysis_2*********
-const char* extractedData = "output.root"; 
- //                    here ^^^^^^
- // is where we need to make changes if we change
- // the name or path of our output root file that was
- // created in the data extraction
 
 std::string longterm_histogram = "output.root";
-LongtermTemp(extractedData, longterm_histogram);
+LongtermTemp(output_tempdatafile, longterm_histogram);
 
 
 
