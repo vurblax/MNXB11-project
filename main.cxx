@@ -11,7 +11,7 @@ int main() {
     // specify the dataset path to the cleaned file
     //this needs to be changed to specify each file we want to look at
     //right now it looks at Luleå
-    const std::string csvFilePath = "./datasets/cleaned/rawdata2_smhi-opendata_1_162860_20231007_155220_Lulea.csv";
+    const std::string csvFilePath = "./datasets/cleaned/rawdata2_smhi-opendata_1_53430_20231007_155558_Lund.csv";
     const std::string outputFileName = "output.root";
 
     DataExtractor dataExtractor(csvFilePath, outputFileName);
