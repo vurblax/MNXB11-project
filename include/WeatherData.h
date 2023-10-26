@@ -7,6 +7,10 @@ class WeatherData {
  public:
  
   WeatherData(int year, int month, int day, int hour, double temperature, char quality);
+  
+  bool isDataIgnored() const {
+        return ignoreData;
+    }
 
  private:
   int year; 
@@ -15,6 +19,7 @@ class WeatherData {
   int hour; 
   double temperature; 
   char quality;
+  bool ignoreData = false; // Initialized to false by default
 };
 
 //Constructor implementation
