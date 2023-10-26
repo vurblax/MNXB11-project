@@ -40,10 +40,8 @@ LongtermTemp(output_tempdatafile);
 
 // *******HERE STARTS Analysis_3*********
 
-
-std::vector<Measurement> measurements = load_measurements("your_data.csv"); // Replace with your data file
-
-analyze_warmest_and_coldest_days(measurements, "output.root");
+std::string output_tempdatafile3 = "output.root" 
+analyze_warmest_and_coldest_days(output_tempdatafile3);
 
   return 0;
 }
