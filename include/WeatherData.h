@@ -23,7 +23,7 @@ class WeatherData {
 };
 
 //Constructor implementation
-WeatherData::WeatherData(int year, int month, int day, int hour, int minute, int second, double airtemp, char quality)
+WeatherData::WeatherData(int year, int month, int day, int hour, double airtemp, char quality)
     : year(year), month(month), day(day), hour(hour), airtemp(airtemp), quality(quality) {
 }
 
