@@ -1,40 +1,50 @@
+#include <iostream>
+#include <string>
 #include "Analysis.h"
+#include "TFile.h"
+#include "TCanvas.h"
+#include "TH1D.h"
+#include "TTree.h"
 
-void createTemperatureHistogram(const std::string& output_tempdatafile2) {
-    // Define the start and end years for your data
-    int startYear = 1780;
-    int endYear = 2022;
+void CreateDecember25thHistogram(const std::string& output_tempdatafile2) {
+    TFile output_file{output_tempdatafile2.c_str(), "UPDATE"};
 
-    // Create a ROOT file to save the histogram
-    TFile outputFile("temperature_histogram.root", "RECREATE");
+    if (output_file.IsZombie()) {
+        std::cerr << "Error: Could not open data file." << std::endl;
+        return;
+    }
 
-    // Create a histogram to store temperature data
-    TH1D* temperatureHistogram = new TH1D("temperature_histogram", "Temperature on December 25th;Year;Temperature (°C)", (endYear - startYear + 1), startYear, endYear + 1);
+    TTree* dataTree = dynamic_cast<TTree*>(output_file.Get("projectData")); // Replace with the actual tree name
+    if (!dataTree) {
+        std::cerr << "Error: Could not find data tree in the file." << std::endl;
+        return;
+    }
 
-    for (int year = startYear; year <= endYear; year++) {
-        // For each year, obtain a collection of temperature data for the entire year
-        std::vector<WeatherData> yearTemperatureData = getTemperatureDataForYear(year);
+    double airtemp;
+    TBranch* tempBranch = dataTree->GetBranch("airtemp");
+    tempBranch->SetAddress(&airtemp);
 
-        // Iterate over the data points for the year and fill the histogram
-        for (const WeatherData& dataPoint : yearTemperatureData) {
-            // Fill the histogram with the temperature data for the current year and data point
-            temperatureHistogram->Fill(year, dataPoint.getTemperature());
+    int minTemp = -20; // Define your desired temperature range
+    int maxTemp = 30;
+
+    // Define the number of bins based on the temperature range
+    int nBins = maxTemp - minTemp + 1;
+
+    TH1D* december25thHistogram{new TH1D{"december25thHistogram", "Temperature on Dec 25th Histogram",
+        nBins, minTemp - 0.5, maxTemp + 0.5}};
+
+    Long64_t nEntries = dataTree->GetEntries();
+    for (Long64_t entry = 0; entry < nEntries; ++entry) {
+        dataTree->GetEntry(entry);
+        // Check if the date is December 25th and the temperature is within the specified range
+        if (static_cast<int>(airtemp) == 25 && airtemp >= minTemp && airtemp <= maxTemp) {
+            december25thHistogram->Fill(airtemp);
         }
     }
 
-    // Set up the histogram properties (labels, colors, etc.) as needed
+    december25thHistogram->SetXTitle("Temperature on December 25th");
+    december25thHistogram->SetYTitle("Entries");
 
-    // Save the histogram to the ROOT file
-    temperatureHistogram->Write();
-
-    // Calculate the mean and standard deviation of the histogram
-    double mean = temperatureHistogram->GetMean();
-    double stdev = temperatureHistogram->GetRMS();
-    
-    // Output the mean and standard deviation
-    std::cout << "Mean: " << mean << std::endl;
-    std::cout << "Standard Deviation: " << stdev << std::endl;
-
-    // Close the ROOT file
-    outputFile.Close();
+    december25thHistogram->Write();
+    output_file.Close();
 }
