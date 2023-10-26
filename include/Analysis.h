@@ -1,20 +1,21 @@
 #ifndef ANALYSIS_H
 #define ANALYSIS_H
-#include <TFile.h>
-#include <TH1D.h>
 
-#include <iostream>
 #include <string>
 #include <vector>
+#include <iostream>
+
+#include <TFile.h>
+#include <TH1D.h>
+#include <TTree.h>
 
 #include "WeatherData.h"
-// Create histograms of the signal and background measurements as well as a
-// histogram representing the sum of the other two and store the results in a
-// ROOT file with name given by output_filename
-void signal_and_background(const std::vector<Measurement>& measurements,
-                           const std::string& output_filename);
-void some_analysis(const std::vector<Measurement>& measurements,
-                   const std::string& output_filename);
-void some_other_analysis(const std::vector<Measurement>& measurements,
-                         const std::string& output_filename);
+
+
+// Function to get temperature data for December 25th in a given year
+double getTemperatureDataForYear(const std::vector<WeatherData>& WeatherData, const std::string& TempYearHist);
+
+void createTemperatureHistogram();
+
+
 #endif /* ANALYSIS_H */
