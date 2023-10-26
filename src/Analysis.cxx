@@ -1,6 +1,6 @@
 #include "Analysis.h"
 
-void createTemperatureHistogram() {
+void createTemperatureHistogram(const std::string& output_tempdatafile2) {
     // Define the start and end years for your data
     int startYear = 1780;
     int endYear = 2022;

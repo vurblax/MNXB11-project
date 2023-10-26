@@ -5,6 +5,7 @@
 #include "WeatherData.h"
 #include "date.h"
 #include "csv.h"
+#include "Analysis.h"
 #include "Analysis_2.h"
 #include "Analysis_3.h"
 
@@ -27,8 +28,8 @@ int main() {
 
 // *******HERE STARTS Analysis*********
 
-//std::string output_tempdatafile = "output.root";
-//createTemperatureHistogram(output_tempdatafile);
+std::string output_tempdatafile2 = "output.root";
+createTemperatureHistogram(output_tempdatafile);
 
 // *******HERE STARTS Analysis_2*********
 
