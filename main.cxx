@@ -13,6 +13,7 @@ int main() {
     //right now it looks at Lund
     const std::string csvFilePath = "./datasets/cleaned/rawdata2_smhi-opendata_1_53430_20231007_155558_Lund.csv";
     const std::string outputFileName = "output.root";
+    const std::string output_filename = "longterm_histogram.root";
 
     DataExtractor dataExtractor(csvFilePath, outputFileName);
 
@@ -29,13 +30,10 @@ const char* extractedData = "output.root";
  // the name or path of our output root file that was
  // created in the data extraction
 
-LongtermTemp longtermAnalysis(extractedData);
+std::string longterm_histogram = "output.root";
+LongtermTemp(extractedData, longterm_histogram);
 
-TH1D* yearMeanHist = new TH1D("yearMeanHist", "Yearly Mean Temperatures", 100, 0, 100);
 
-longtermAnalysis.CalculateAnnualMeans(yearMeanHist);
-
-PlotLongtermHistogram(longtermAnalysis.annualMeanTemps);
 
 // more analyses to be added here
 return 0;
