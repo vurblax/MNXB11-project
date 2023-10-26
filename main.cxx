@@ -2,6 +2,7 @@
 #include <string>
 #include <chrono>
 #include "DataExtraction.h"
+#include "WeatherData.h"
 #include "date.h"
 #include "csv.h"
 #include "Analysis_2.h"
@@ -22,6 +23,8 @@ int main() {
     } else {
         std::cerr << "Data extraction failed." << std::endl;
     }
+
+const auto WeatherData{WeatherData(input_file)};
 
 // *******HERE STARTS Analysis_2*********
 const char* extractedData = "output.root"; 

@@ -6,7 +6,7 @@
 class WeatherData {
  public:
  
-  WeatherData(int year, int month, int day, int hour, double temperature, char quality);
+  WeatherData(int year, int month, int day, int hour, double airtemp, char quality);
   
   bool isDataIgnored() const {
         return ignoreData;
@@ -17,14 +17,14 @@ class WeatherData {
   int month;
   int day; 
   int hour; 
-  double temperature; 
+  double airtemp; 
   char quality;
   bool ignoreData = false; // Initialized to false by default
 };
 
 //Constructor implementation
-WeatherData::WeatherData(int year, int month, int day, int hour, int minute, int second, double temperature, char quality)
-    : year(year), month(month), day(day), hour(hour), temperature(temperature), quality(quality) {
+WeatherData::WeatherData(int year, int month, int day, int hour, int minute, int second, double airtemp, char quality)
+    : year(year), month(month), day(day), hour(hour), airtemp(airtemp), quality(quality) {
 }
 
 #endif /* WEATHERDATA_H */

@@ -1,9 +1,9 @@
 #include "WeatherData.h"
 
-WeatherData::WeatherData(int year, int month, int day, int hour, double temperature, char quality)
-    : year{year}, month{month}, day{day}, hour{hour}, temperature{temperature}, quality{quality} { 
+WeatherData::WeatherData(int year, int month, int day, int hour, double airtemp, char quality)
+    : year{year}, month{month}, day{day}, hour{hour}, airtemp{airtemp}, quality{quality} { 
     // Checks if temperature has an infinite value, if so, skip
-        if (std::isinf(temperature)) {
+        if (std::isinf(airtemp)) {
         throw std::invalid_argument("Infinite temperature value found!");
         
     }

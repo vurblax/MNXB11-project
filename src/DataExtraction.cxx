@@ -30,7 +30,7 @@ bool DataExtractor::ProcessCSVData(const std::string& output_tempdatafile) {
 
 // declaring the variables which we use to store our variables from the csv
     double_t airtemp;
-    std::string quality;
+    char quality;
     date::year_month_day date;
     std::string time_encoded;
     int hour(0);
