@@ -8,18 +8,6 @@
 #include <string>
 #include <vector>
 
-class LongtermTemp {
-public:
-    LongtermTemp(const char* extractedData);
-    void CalculateAnnualMeans(TH1D* yearMeanHist);
-    std::vector<double> annualMeanTemps;
-    
-private:
-    TFile rootFile;
-    TTree* longtermTree;
-
-};
-
-void PlotLongtermHistogram(const std::vector<double>& annualMeanTemps);
+void LongtermTemp(const char* extractedData, const std::string& longterm_histogram);
 
 #endif 

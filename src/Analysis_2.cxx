@@ -5,56 +5,51 @@
 #include "TCanvas.h"
 #include "TH1D.h"
 
-LongtermTemp::LongtermTemp(const char* extractedData) : rootFile(extractedData, "READ") {
-    //initializing the class!!
-    longtermTree = (TTree*)rootFile.Get("longtermTree");
-    annualMeanTemps.resize(100, 0.0);
+void LongtermTemp(const std::vector<WeatherData>& weatherdata,
+                  const std::string& longterm_histogram) {
+                    //const char* probably needs to change
+                    //i want that line to retrieve our extracted data
+                    //that is, from output.root
+    TFile output_file{longterm_histogram.c_str(), "UPDATE"};
+if (output_file.IsZombie()) {
+    std::cerr << "Error: Could not open data file." << std::endl;
+    return;
 }
 
-void LongtermTemp::CalculateAnnualMeans(TH1D* yearMeanHist) {
-    Double_t airtemp;
-    longtermTree->SetBranchAddress("airtemp", &airtemp);
+    TTree* dataTree = dynamic_cast<TTree*>(output_file.Get("NAME OF TREE WITHIN output.root")); // replace with the actual tree name!!!!
+    if (!dataTree) {
+        std::cerr << "Error: Could not find data tree in the file." << std::endl;
+        return;
+    }
 
-Long64_t nEntries = longtermTree->GetEntries();
-Long64_t yearsInData =nEntries / (3 * 365);
-Long64_t startEntry = (yearsInData > 100) ? (nEntries - 100 * 3 * 365) : 0;
+    std::vector<double> annualMeanTemps;
+    int year;
+    double airtemp;
+    TBranch* yearBranch = dataTree->GetBranch("year"); 
+    TBranch* tempBranch = dataTree->GetBranch("airtemp");
 
-int year= 0;
-double dailySum = 0.0;
-int measurementsPerYear = 3 * 365;
+    yearBranch->SetAddress(&year);
+    tempBranch->SetAddress(&airtemp);
 
-for (Long64_t i = startEntry; i < nEntries; i++) {
-    longtermTree->GetEntry(i);
-    dailySum += airtemp;
+    int startYear = 1920;
+    int endYear = 2022;
 
+    TH1D* yearMeanHist{new TH1D{"yearMeanHist", "Annual Mean Temperatures", 
+        endYear - startYear + 1, startYear - 0.5, endYear + 0.5}};
 
-    if ((i + 1) % measurementsPerYear == 0) {
-        annualMeanTemps[year] = dailySum / measurementsPerYear;
-        dailySum = 0.0;
-        year++;
+    Long64_t nEntries = dataTree->GetEntries();
+    for (Long64_t entry = 0; entry < nEntries; ++entry) {
+        dataTree->GetEntry(entry);
+        if (year >= startYear && year <= endYear) {
+            yearMeanHist->Fill(year, airtemp);
         }
     }
-    for (int i = 0; i < 100; i++) {
-        yearMeanHist->Fill(i, annualMeanTemps[i]);
-    }
-}
 
-void PlotLongtermHistogram(const std::vector<double>& annualMeanTemps) {
+    yearMeanHist->SetXTitle("Year");
+    yearMeanHist->SetYTitle("Mean Temperature");
 
-    TCanvas* c1 = new TCanvas("c1", "Annual Mean Temperatures", 800, 600);
-
-    TH1D* hist = new TH1D("hist", "Annual Mean Temperatures", 100, 0, 100);
-
-    for (int i = 0; i < 100; i++) {
-        hist->Fill(i, annualMeanTemps[i]);
-    }
-
-    hist->SetXTitle("Year");
-    hist->SetYTitle("Mean Temperature");
-
-    hist->Draw();
-
-    c1->SaveAs("longterm_histogram.png");
+    yearMeanHist->Write();
+    output_file.Close();
 }
 
 
