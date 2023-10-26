@@ -4,13 +4,13 @@
 #include "DataExtraction.h"
 #include "date.h"
 #include "csv.h"
+#include "Analysis_2.h"
 
-
-// first part where we extract the info from the csv file
 int main() {
-    // specify the dataset path to the cleaned file
+    // DATA EXTRACTION PART
+    // ****note****: specify the dataset path to the cleaned file
     //this needs to be changed to specify each file we want to look at
-    //right now it looks at Luleå
+    //right now it looks at Lund
     const std::string csvFilePath = "./datasets/cleaned/rawdata2_smhi-opendata_1_53430_20231007_155558_Lund.csv";
     const std::string outputFileName = "output.root";
 
@@ -22,5 +22,21 @@ int main() {
         std::cerr << "Data extraction failed." << std::endl;
     }
 
-    return 0;
+// *******HERE STARTS Analysis_2*********
+const char* extractedData = "output.root"; 
+ //                    here ^^^^^^
+ // is where we need to make changes if we change
+ // the name or path of our output root file that was
+ // created in the data extraction
+
+LongtermTemp longtermAnalysis(extractedData);
+
+TH1D* yearMeanHist = new TH1D("yearMeanHist", "Yearly Mean Temperatures", 100, 0, 100);
+
+longtermAnalysis.CalculateAnnualMeans(yearMeanHist);
+
+PlotLongtermHistogram(longtermAnalysis.annualMeanTemps);
+
+// more analyses to be added here
+return 0;
 }
