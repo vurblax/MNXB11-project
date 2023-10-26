@@ -1,18 +1,22 @@
+
 #ifndef ANALYSIS_H
 #define ANALYSIS_H
 
-#include <string>
-#include <vector>
-#include <iostream>
+#include "TROOT.h"
+#include "TCanvas.h"
+#include "TH1D.h"
+#include "TTree.h" // Add this include for working with TTrees
 
-#include <TFile.h>
-#include <TH1D.h>
-#include <TTree.h>
+void CreateDecember25thHistogram(const std::string& output_tempdatafile);
 
-#include "WeatherData.h"
+class Analysis {
+public:
+    Analysis();
+    void SetupROOT();
+    void CreateCanvas();
+    void DrawHistogram(TH1D* histogram);
 
+    
+};
 
-void createTemperatureHistogram(const std::string& output_tempdatafile2);
-
-
-#endif /* ANALYSIS_H */
+#endif
