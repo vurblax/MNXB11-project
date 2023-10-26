@@ -8,6 +8,8 @@
 #include <string>
 #include <vector>
 
-void LongtermTemp(const char* extractedData, const std::string& longterm_histogram);
+#include "WeatherData.h"
+
+void LongtermTemp(const std::string& output_tempdatafile);
 
 #endif 

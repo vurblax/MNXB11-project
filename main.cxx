@@ -6,6 +6,7 @@
 #include "date.h"
 #include "csv.h"
 #include "Analysis_2.h"
+//#include "Analysis_3.h"
 
 int main() {
     // DATA EXTRACTION PART
@@ -32,14 +33,11 @@ LongtermTemp(output_tempdatafile);
 
 
 // more analyses to be added here
-return 0;
-}
-#include "Analysis.h"
 
-int main() {
-  std::vector<Measurement> measurements = load_measurements("your_data.csv"); // Replace with your data file
 
-  analyze_warmest_and_coldest_days(measurements, "output.root");
+ // std::vector<Measurement> measurements = load_measurements("your_data.csv"); // Replace with your data file
+
+  //analyze_warmest_and_coldest_days(measurements, "output.root");
 
   return 0;
 }
