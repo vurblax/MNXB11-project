@@ -1,74 +1,62 @@
-# MNXB11-project-template
+# MNXB11 Project Group E
 # About
-This folder contains a skeleton for your project that you can use as
-inspiration. Once you get started, do feel free to go ahead and replace this
-README file with one representing your project.
+This is a project for the course MNXB11 at Lund University. This README file contains instructions on how to recreate our results.
 
-# Directory structure
+# Prerequisites
+Firsly, in order for this script to run you need to have ROOT installed. Additionally, this project uses two libraries which needs to be installed in order for the script to work. These are:
 
-The base directory here contains your "main" file, i.e. the C++ file that you
-will be using as your starting point in your project. The code in this file should ideally be short and just make use of the functionality that you've
-prepared in your other translation units. The majority of your code should be placed in  the two folders where you define your translation units, `src/` and `include/`. 
+- fast-cpp-csv-parser
+  Created by ben-strasser.
+  A header-only library. Header file: csv.h
+  SSH: git@github.com:ben-strasser/fast-cpp-csv-parser.git
 
-Do remember to add your include guards to your header files, otherwise the compiler will
-get multiple definitions if you end up loading two source files that include the
-same header.
+- date
+  Created by Howard Hinnant.
+  Also a header-only library. Header file: date.h
+  SSH: git@github.com:HowardHinnant/date.git
 
-In the template you can find a small translation unit called Example (in [src/Example.cxx](src/Example.cxx) and [include/Example.h](include/Example.h)) that shows some commented reminders of how the syntax for some C++ constructs work. Feel free to use this as a reference to remind yourself of how to do something while working on it but make sure to remove it from your final project version!
+  In order to install these libraries you must clone the HTTPS (or SSH) for each library, and then make sure that its header file is put into the folder: /dependencies/external/include
+  If the library header files are put in another folder then the makefile won't be able to find the libraries.
 
-There is a demonstration of a toy project you can use for inspiration at [EinarElen/MNXB11-project-demo](https://github.com/EinarElen/MNXB11-project-demo). You should not copy code from this repository. There are some intentional bugs hiding in there, see if you can spot them. 
+# Data cleaning
+Before compiling the script you will need to clean the raw temperature data .csv files using a bash script. The datafiles are included in /datasets as a tarball. The bash script is called cleaner.sh and can be found in the root directory. Clean files are already present in the directory but if you want to recreate our results from step 1 you have to follow these steps: 
 
-We have also included three special files in the base of the repository 
-- [.gitignore](.gitignore)
-  - This file contains regular expressions that git tells git that it shouldn't add certain file to your repository. 
-  - Your git repository should generally not contain binary files like object files or executables nor should it contain build artefacts like external libraries. 
-- [.clang-format](.clang-format)
-  - This file holds the configuration for the clang-format tool that you can use to format your code consistently 
-  - It is a good idea to keep your code formatted in a consistent manner, especially when working in groups but doing it manually is a waste of your time. Use a tool for it!
-  ```
-  # Show what the src/Example.cxx file would look like if formatted
-  clang-format src/Example.cxx 
-  # Carry out the formatting in the file directly 
-  clang-format src/Example.cxx -i
-  ```
-  - The `.clang-format` file holds the configuration that clang-format will use to determine how to format your code. By default, it will be formatted according to Google's style but you can pick any that you like from https://clang.llvm.org/docs/ClangFormatStyleOptions.html
-- [rootlogon.C](rootlogon.C)
-  - This file contains code that ROOT will execute automatically whenever you start it, a good place to place general style choices you want to make or anything else you always want to run! 
-  - Be careful to not include anything that depends on your particular machine here (e.g. absolute paths)
-# Building the project
+Firstly you extract the csv files by opening the dataset.tgz tarball by running tar zxvf datasets.tgz. 
 
-The [datasets](datasets) folder contains open data from SMHI and a README.md with further information about it.
+You then clean the files by running cleaner.sh ./datasets/name-of-file
+
+The files are now ready for the data extraction.
+
+# How to compile the script
+The script uses a makefile to compile. You need to be in the root directory of the repository, and run make. The script itself has been divided into several translation units:
+
+- DataExtraction
+  The first part of the script. This script retrieves the data from the cleaned csv and puts it into a ROOT TTree called output.root
+
+- WeatherData
+  This script works as a check to filter out data points that have not been marked as good quality by SMHI.
+
+- Three analyses with separate translation units:
+
+  Analysis 1 - The temperature of a given day (25th of December).
+
+  Analysis 2 - The change in yearly mean temperature from 1990 - 2023.
+
+  Analysis 3 - The warmest and coldest day of each year.
+
+  All analyses looks at data from Lund.
 
 
-We have included a basic Makefile here which should be familiar to you. It follows the same project structure that we have been using in the course. When you add a new translation unit to the project, you have update the dependencies in the Makefile. 
+In order to choose which dataset you want to base your analysis on, you need to go into the main.cxx file and change the filepath on line 17. It is currently set to Lund, which it will have to be if you intend to recreate our graphs.
 
-By default, the `all` target will be run which 
-- Compiles any `.cxx` files in the `src/` directory into object files 
-- Compiles `main.cxx` and links with all the object files in `src/`
+When you run make, all analyses will be run. 
 
-You can run the `clean` target to remove any object files that have been produced as well as the `main` executable.
+# Retrieving the graphs
+In order to retrieve the resulting graphs and histograms, you need to run the executable by typing ./main. This will produce three png images with the graphs, one for each analysis. The names for each of the images are:
 
-## Adding external software libraries
+Analysis 1: december25th_histogram.png
+Analysis 2: yearmeans.png
+Analysis 3: 
 
-If you want to make use of external software libraries with your project, you
-will always have to tell the tool that builds your project. The Makefile included in this template will pick up any header files in the external/include directory and look for libraries in external/lib and external/lib64 so if you use external as your installation directory, you only need to add the corresponding `-l` flag to the linker.
-
-Here's an illustration of the typical process to add a (CMake based) external library
-``` sh
-# Clone or download the library you want to use 
-git clone https://somerepository.com/alibrary alibrary # The last argument determines what the directory will be called
-
-mkdir build/alibrary -pv # -p will tell mkdir to create the build/ directory if it doesn't already exist 
-# Go into the build directory
-cd build/alibrary 
-# Look up the documentation for the library to find out if there are any additional flags you need for CMake 
-
-# This command tells CMake to configure the build directory based on the source code in the ../../alibrary folder and to install the resulting headers and library files into ../../external
-cmake ../../alibrary -DCMAKE_INSTALL_PREFIX=../../external 
-# Build and install! Use -jN to launch N jobs
-make -j8 install # If you are on an 8-core machine
-```
-
-Make sure to document how to do this for any library you choose to use!
-
-Have fun!
+You can also view the graphs in root. You enter root by typing: root --web=off
+The graphs, as well as the TTree produced by the script, can then be viewed in the TBrowser by typing: TBrowser b("output.root)
