@@ -7,7 +7,7 @@
 #include "TH1D.h"
 #include "TTree.h" // Add this include for working with TTrees
 
-void CreateDecember25thHistogram(const std::string& output_tempdatafile);
+void CreateDecember25thHistogram(const std::string& output_tempdatafile2);
 
 class Analysis {
 public:
