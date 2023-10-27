@@ -5,18 +5,12 @@
 #include "TROOT.h"
 #include "TCanvas.h"
 #include "TH1D.h"
-#include "TTree.h" // Add this include for working with TTrees
+#include <TFile.h>
+#include "TTree.h" 
+#include "WeatherData.h"
 
-void CreateDecember25thHistogram(const std::string& output_tempdatafile2);
 
-class Analysis {
-public:
-    Analysis();
-    void SetupROOT();
-    void CreateCanvas();
-    void DrawHistogram(TH1D* histogram);
+void CreateDecember25thHistogram(const std::string& output_tempdatafile);
 
-    
-};
 
 #endif
