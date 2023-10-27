@@ -16,7 +16,7 @@ all: main
 #
 # Remove the Example object file when you are done looking at it, it doesn't
 # contribute to the executable!
-main: main.cxx src/DataExtraction.o src/WeatherData.o src/Analysis.o src/Analysis_2.o src/Analysis_3.o 
+main: main.cxx src/DataExtraction.o src/WeatherData.o src/Analysis.o src/Analysis_2.o  
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
 
 src/%.o: src/%.cxx
