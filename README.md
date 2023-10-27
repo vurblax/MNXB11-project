@@ -7,12 +7,14 @@ Firsly, in order for this script to run you need to have ROOT installed. Additio
 
 - fast-cpp-csv-parser
   Created by ben-strasser.
-  A header-only library. Header file: csv.h
+  A header-only library. 
+  Header file: csv.h
   SSH: git@github.com:ben-strasser/fast-cpp-csv-parser.git
 
 - date
   Created by Howard Hinnant.
-  Also a header-only library. Header file: date.h
+  Also a header-only library. 
+  Header file: date.h
   SSH: git@github.com:HowardHinnant/date.git
 
   In order to install these libraries you must clone the HTTPS (or SSH) for each library, and then make sure that its header file is put into the folder: /dependencies/external/include
