@@ -33,15 +33,15 @@ CreateDecember25thHistogram(output_tempdatafile2);
 
 // *******HERE STARTS Analysis_2*********
 
-//std::string output_tempdatafile = "output.root";
-//LongtermTemp(output_tempdatafile);
+std::string output_tempdatafile = "output.root";
+LongtermTemp(output_tempdatafile);
 
 
 
 // *******HERE STARTS Analysis_3*********
 
-//std::string output_tempdatafile3 = "output.root" 
-//analyze_warmest_and_coldest_days(output_tempdatafile3);
+std::string output_tempdatafile3 = "output.root" 
+analyze_warmest_and_coldest_days(output_tempdatafile3);
 
   return 0;
 }
