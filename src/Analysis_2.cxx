@@ -86,26 +86,24 @@ gr->GetYaxis()->SetTitleColor(kBlack);
     gr->SetLineColor(kRed);
     c1->SetFillColor(kGray);
 
-    // creating a linear fit function
+    // creating a linear fit function and its corresponding equation to show in the legend
    TF1* linearFit = new TF1("linearFit", "[0] + [1]*x", 1920, 2022);
-   // linearFit->SetParName(1, "Intercept"); ** this is the start of a failed attempt at
-   // linearFit->SetParName(1, "Slope"); ** displaying the fit equation in the legend
-    linearFit->SetTitle("Linear Fit");
-
-   // gr->Fit(linearFit, "Q");
-
-// double intercept = linearFit->GetParameter(0);
-// double slope = linearFit->GetParameter(1);
-
-// TString fitParameters = Form("Fit Parameters: Intercept=%.2f, Slope=%.2f", intercept, slope);
-// TString trendlineEquation = Form("Trendline: y = %.2fx + %.2f", slope, intercept);
+   linearFit->SetParName(1, "Intercept"); 
+   linearFit->SetParName(1, "Slope"); 
+   linearFit->SetTitle("Linear Fit");
+   linearFit->SetLineColor(kMagenta);
+   
+gr->Fit(linearFit, "Q");
+ double intercept = linearFit->GetParameter(0);
+ double slope = linearFit->GetParameter(1);
+ TString trendlineEquation = Form("Fit equation: y = %.2fx + %.2f", slope, intercept);
 
 // creating a legend for the graph
     TLegend* legend = new TLegend(0.15, 0.75, 0.6, 0.9);
     legend->SetHeader("Legend", "C");
     legend->AddEntry(gr, "Yearly mean temperature", "l"); 
     legend->AddEntry(linearFit, "Trendline as a linear fit", "l"); 
-
+legend->AddEntry((TObject*)nullptr, trendlineEquation, "");
     // TLegendEntry* entry1 = legend->AddEntry((TObject*)nullptr, trendlineEquation, "");
     // TLegendEntry* entry2 = legend->AddEntry((TObject*)nullptr, fitParameters, "");
 
@@ -114,12 +112,9 @@ gr->GetYaxis()->SetTitleColor(kBlack);
     legend->SetFillColor(kWhite);
     legend->SetTextSize(0.03);
 
-
-  linearFit->SetLineColor(kMagenta);
-
-// darwing teh graph, fitting it with the linear function and drawing the legend
+// drawing the graph, fitting it with the linear function and drawing the legend
     gr->Draw("AL"); 
-    gr->Fit(linearFit, "Q");
+  
     legend->Draw();
     c1->SaveAs("yearmeans.png");
 
@@ -127,6 +122,4 @@ gr->GetYaxis()->SetTitleColor(kBlack);
     gr->Write();
     output_file.Close();
 }
-
-
 
