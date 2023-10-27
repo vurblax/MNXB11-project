@@ -1,7 +1,26 @@
-#include "Analysis.h"
+#include "Analysis_3.h"
 #include <iostream>
 #include <fstream>
+#include <iostream>
+#include <string>
+#include "TFile.h"
+#include "TCanvas.h"
+#include "TH1D.h"
+#include "TGraph.h"
+#include "TCanvas.h"
+#include "WeatherData.h"
 
+TFile output_file{output_tempdatafile.c_str(), "UPDATE"};
+if (output_file.IsZombie()) {
+    std::cerr << "Error: Could not open data file." << std::endl;
+    return;
+}
+
+    TTree* dataTree = dynamic_cast<TTree*>(output_file.Get("projectData")); // replace with the actual tree name!!!!
+    if (!dataTree) {
+        std::cerr << "Error: Could not find data tree in the file." << std::endl;
+        return;
+    }
 // Define the custom Gaussian function
 double Gaussian(double* x, double* par) {
   return par[0] * exp(-0.5 * (x[0] * x[0] - 2 * x[0] * par[1] + par[1] * par[1]) / (par[2] * par[2]));
@@ -60,5 +79,3 @@ void analyze_warmest_and_coldest_days(const std::vector<Measurement>& measuremen
   
   canvas->SaveAs("analysis_plot.png");
   canvas->Write();
-}
-

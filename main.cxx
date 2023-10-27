@@ -7,7 +7,7 @@
 #include "csv.h"
 #include "Analysis.h"
 #include "Analysis_2.h"
-#include "Analysis_3.h"
+// #include "Analysis_3.h"
 
 int main() {
     // DATA EXTRACTION PART
@@ -40,8 +40,8 @@ LongtermTemp(output_tempdatafile);
 
 // *******HERE STARTS Analysis_3*********
 
-std::string output_tempdatafile3 = "output.root" 
-analyze_warmest_and_coldest_days(output_tempdatafile3);
+// std::string output_tempdatafile3 = "output.root" 
+// analyze_warmest_and_coldest_days(output_tempdatafile3);
 
   return 0;
 }
