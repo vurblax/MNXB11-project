@@ -1,13 +1,7 @@
 #!/bin/bash
-# Description: this script manuipulates specific SMHI dataset and 
-#              performs some cleaning actions on it, namely:
-#              - Takes an SMHI datafile <filename> from a specified path in the filesystem
-#              - Cleanses up unwanted information in the data file and
-#                 extracts just the raw temperature data in
-#                 - rawdata_<filename>
-#              - prepares the file to be read by standard C++ 
-#                CSV libraries
-#
+# This code manuipulates weather SMHI dataset aand cleans it by deleting head information, dashes and semicolons
+#with spaces to make it undestandable for C++. The final result is a raw data 1 csv file. 
+#            
 # Examples:
 #        ./cleaner.sh ../datasets/smhi-opendata_1_52230_20231007_155448_Falsterbo.csv
 
