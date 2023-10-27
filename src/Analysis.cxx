@@ -4,10 +4,12 @@
 #include "TTree.h"
 #include "TH1D.h"
 #include "TCanvas.h"
+#include "Analysis.h"
 #include "WeatherData.h"
+#include <map>
 
-void CreateDecember25thHistogram(const std::string& output_tempdatafile2) {
-    TFile output_file{output_tempdatafile2.c_str(), "UPDATE"};
+void CreateDecember25thHistogram(const std::string& output_tempdatafile) {
+    TFile output_file{output_tempdatafile.c_str(), "UPDATE"};
 
     if (output_file.IsZombie()) {
         std::cerr << "Error: Could not open data file." << std::endl;
@@ -20,30 +22,52 @@ void CreateDecember25thHistogram(const std::string& output_tempdatafile2) {
         return;
     }
 
+    int year, month, day, hour;
     double airtemp;
-    TBranch* tempBranch = dataTree->GetBranch("airtemp");
-    tempBranch->SetAddress(&airtemp);
+    char quality;
 
-    int minTemp = -10; // Define your desired temperature range
+    TBranch* yearBranch = dataTree->GetBranch("year");
+    TBranch* monthBranch = dataTree->GetBranch("month");
+    TBranch* dayBranch = dataTree->GetBranch("day");
+    TBranch* hourBranch = dataTree->GetBranch("hour");
+    TBranch* tempBranch = dataTree->GetBranch("airtemp");
+    TBranch* qualityBranch = dataTree->GetBranch("quality");
+
+    yearBranch->SetAddress(&year);
+    monthBranch->SetAddress(&month);
+    dayBranch->SetAddress(&day);
+    hourBranch->SetAddress(&hour);
+    tempBranch->SetAddress(&airtemp);
+    qualityBranch->SetAddress(&quality);
+
+    int minTemp = -10;
     int maxTemp = 30;
 
-    // Define the number of bins based on the temperature range
-    int nBins = maxTemp - minTemp + 1;
-
-    // Create a histogram to count the occurrences of each temperature
-    TH1D* december25thHistogram{new TH1D{"december25thHistogram", "Temperature on Dec 25th",
-        nBins, minTemp - 0.5, maxTemp + 0.5}};
+    std::map<double, int> temperatureData;
 
     Long64_t nEntries = dataTree->GetEntries();
 
     for (Long64_t entry = 0; entry < nEntries; ++entry) {
         dataTree->GetEntry(entry);
-        // Check if the date is December 25th
-        int month = static_cast<int>(airtemp / 10000);
-        int day = static_cast<int>(airtemp / 100) % 100;
+        // Add print statements to check values
+        std::cout << "Year: " << year << " Month: " << month << " Day: " << day << " Hour: " << hour << " Temperature: " << airtemp << " Quality: " << quality << std::endl;
+        // Check if the date is December 25th and if the temperature is within the specified range
         if (month == 12 && day == 25 && airtemp >= minTemp && airtemp <= maxTemp) {
-            december25thHistogram->Fill(airtemp);
+            temperatureData[airtemp]++;
         }
+    }
+    // Create a histogram to display the temperature frequencies on December 25th
+    TH1D* december25thHistogram = new TH1D("december25thHistogram", "Temperature Frequency on Dec 25th",
+        static_cast<Int_t>(temperatureData.size()), minTemp - 0.5, maxTemp + 0.5);
+
+    int index = 1;
+
+    for (const auto& entry : temperatureData) {
+        double airtemp = entry.first;
+        int count = entry.second;
+        december25thHistogram->SetBinContent(index, count);
+        december25thHistogram->GetXaxis()->SetBinLabel(index, std::to_string(airtemp).c_str());
+        index++;
     }
 
     december25thHistogram->SetXTitle("Temperature on December 25th");
@@ -62,5 +86,3 @@ void CreateDecember25thHistogram(const std::string& output_tempdatafile2) {
     december25thHistogram->Write();
     output_file.Close();
 }
-
-
