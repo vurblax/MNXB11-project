@@ -19,7 +19,7 @@ if (output_file.IsZombie()) {
     return;
 }
 // retrieving the data tree from the ROOT file
-    TTree* dataTree = dynamic_cast<TTree*>(output_file.Get("projectData")); // replace with the actual tree name!!!!
+    TTree* dataTree = dynamic_cast<TTree*>(output_file.Get("projectData")); 
     if (!dataTree) {
         std::cerr << "Error: Could not find data tree in the file." << std::endl;
         return;
@@ -52,7 +52,7 @@ if (output_file.IsZombie()) {
         WeatherData measurements{year, airtemp, quality};
 
         if (year >= startYear && year <= endYear) {
-           // if (measurements.isDataIgnored()) { //removed this check because: 
+           // if (measurements.isDataIgnored()) { ***removed this check because: 
                 // the raw data has been checked; quality is 'G' for those values
                 //but including the quality check gives odd values between years 1980-2010  
                 // Needs further troubleshooting in order to determine cause
@@ -92,7 +92,7 @@ gr->GetYaxis()->SetTitleColor(kBlack);
    linearFit->SetParName(1, "Slope"); 
    linearFit->SetTitle("Linear Fit");
    linearFit->SetLineColor(kMagenta);
-   
+
 gr->Fit(linearFit, "Q");
  double intercept = linearFit->GetParameter(0);
  double slope = linearFit->GetParameter(1);
@@ -104,8 +104,6 @@ gr->Fit(linearFit, "Q");
     legend->AddEntry(gr, "Yearly mean temperature", "l"); 
     legend->AddEntry(linearFit, "Trendline as a linear fit", "l"); 
 legend->AddEntry((TObject*)nullptr, trendlineEquation, "");
-    // TLegendEntry* entry1 = legend->AddEntry((TObject*)nullptr, trendlineEquation, "");
-    // TLegendEntry* entry2 = legend->AddEntry((TObject*)nullptr, fitParameters, "");
 
     legend->SetBorderSize(1);
     legend->SetFillStyle(0);
