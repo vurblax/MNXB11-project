@@ -6,16 +6,16 @@ This is a project for the course MNXB11 at Lund University. This README file con
 Firsly, in order for this script to run you need to have ROOT installed. Additionally, this project uses two libraries which needs to be installed in order for the script to work. These are:
 
 - fast-cpp-csv-parser
-  Created by ben-strasser.
-  A header-only library. 
-  Header file: csv.h
-  SSH: git@github.com:ben-strasser/fast-cpp-csv-parser.git
+Created by ben-strasser.
+A header-only library. 
+Header file: csv.h
+SSH: git@github.com:ben-strasser/fast-cpp-csv-parser.git
 
 - date
-  Created by Howard Hinnant.
-  Also a header-only library. 
-  Header file: date.h
-  SSH: git@github.com:HowardHinnant/date.git
+Created by Howard Hinnant.
+Also a header-only library. 
+Header file: date.h
+SSH: git@github.com:HowardHinnant/date.git
 
   In order to install these libraries you must clone the HTTPS (or SSH) for each library, and then make sure that its header file is put into the folder: /dependencies/external/include
   If the library header files are put in another folder then the makefile won't be able to find the libraries.
@@ -33,10 +33,10 @@ The files are now ready for the data extraction.
 The script uses a makefile to compile. You need to be in the root directory of the repository, and run make. The script itself has been divided into several translation units:
 
 - DataExtraction
-  The first part of the script. This script retrieves the data from the cleaned csv and puts it into a ROOT TTree called output.root
+The first part of the script. This script retrieves the data from the cleaned csv and puts it into a ROOT TTree called output.root
 
 - WeatherData
-  This script works as a check to filter out data points that have not been marked as good quality by SMHI.
+This script works as a check to filter out data points that have not been marked as good quality by SMHI.
 
 - Three analyses with separate translation units:
 
