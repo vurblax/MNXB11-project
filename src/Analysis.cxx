@@ -84,6 +84,8 @@ void CreateDecember25thHistogram(const std::string& output_tempdatafile) {
     // Set axis labels and create a canvas for displaying the histogram
     december25thHistogram->SetXTitle("Temperature on December 25th [°C]");
     december25thHistogram->SetYTitle("Frequency");
+    december25thHistogram->GetXaxis()->CenterTitle();
+    december25thHistogram->GetYaxis()->CenterTitle();
 
     TCanvas* c1 = new TCanvas("c1", "December 25th Temperature Histogram", 800, 600);
     c1->SetFillColor(kGray);
