@@ -40,7 +40,7 @@ void CreateDecember25thHistogram(const std::string& output_tempdatafile) {
     tempBranch->SetAddress(&airtemp);
     qualityBranch->SetAddress(&quality);
 
-    int minTemp = -10;
+    int minTemp = -20;
     int maxTemp = 30;
 
     std::map<double, int> temperatureData;
